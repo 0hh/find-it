@@ -1,5 +1,8 @@
 # find-it
 
+## Architecture
+[Angular]---[FastApi]---[db]
+
 ## Git Workflow
 - check-out dev
 - git pull
