@@ -6,7 +6,9 @@
 - create feature branch ´git checkout -b feat/feature_name´ or fix
 - code feature or fix
 - git rebase dev
-- git push
+- create pull request for dev
+- code review
+- merge feature with dev
 - delete feature branch
 - test
 - merge dev with qa
