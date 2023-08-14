@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 
+app = FastAPI()
+
 class Item:
     id: int
     item_name: str
@@ -16,16 +18,13 @@ class Item:
 
 ITEMS = [
     Item(1, "Abstellkammer",None, [] ,[]),
-    Item(2, "Oberstes Regal",1 , [], []),
-    Item(3, "Regal 1", 1 , [], []),
+    Item(2, "Oberstes Regal",1 , [3, 4], []),
+    Item(3, "Klebeband", 2 , [], []),
+    Item(4, "Werkzeugkasten", 2 , [5, 6], []),
+    Item(5, "Klebeband", 4 , [], []),
+    Item(6, "Klebeband", 4 , [], []),
 ]
 
 @app.get("/items")
 async def read_all_items():
     return ITEMS
-"""
-get breadcrumb path of an item
-get children of a container
-get location of an Item
-change location of an Item
-"""
