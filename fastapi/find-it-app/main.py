@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Body
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -16,6 +17,14 @@ class Item:
         self.children = contains_ids
         self.tags = tags
 
+class ItemRequest(BaseModel):
+    id: int
+    item_name: str
+    location_id: int
+    contains_ids: list 
+    tags: list
+
+
 ITEMS = [
     Item(1, "Abstellkammer",None, [] ,[]),
     Item(2, "Oberstes Regal",1 , [3, 4], []),
@@ -30,7 +39,8 @@ async def read_all_items():
     return ITEMS
 
 @app.post("/create-item")
-async def create_item(item_request=Body()):
-    ITEMS.append(item_request)
+async def create_item(item_request: ItemRequest):
+    new_item = Item(**item_request.dict())
+    ITEMS.append(new_item)
 
 
