@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Body
-from pydantic import BaseModel
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+from typing import List
 
 app = FastAPI()
 
@@ -7,8 +8,8 @@ class Item:
     id: int
     item_name: str
     location_id: int
-    contains_ids: list 
-    tags: list
+    contains_ids: List[int] 
+    tags: List[str]
     
     def __init__(self, id, item_name, location_id, contains_ids, tags):
         self.id = id
@@ -18,11 +19,11 @@ class Item:
         self.tags = tags
 
 class ItemRequest(BaseModel):
-    id: int
-    item_name: str
-    location_id: int
-    contains_ids: list 
-    tags: list
+    id: int = Field(gt=0, description="Unique identifier for the request")
+    item_name: str = Field(min_length=3, max_length=64, description="Name of the requested item")
+    location_id: int = Field(gt=0, description="ID of the location")
+    contains_ids: List[int] = Field(description="List of IDs contained within the item")
+    tags: List[str] = Field(description="List of tags associated with the item") 
 
 
 ITEMS = [
