@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 
 app = FastAPI()
 
@@ -21,10 +21,16 @@ ITEMS = [
     Item(2, "Oberstes Regal",1 , [3, 4], []),
     Item(3, "Klebeband", 2 , [], []),
     Item(4, "Werkzeugkasten", 2 , [5, 6], []),
-    Item(5, "Klebeband", 4 , [], []),
-    Item(6, "Klebeband", 4 , [], []),
+    Item(5, "Hammer", 4 , [], []),
+    Item(6, "Zange", 4 , [], []),
 ]
 
 @app.get("/items")
 async def read_all_items():
     return ITEMS
+
+@app.post("/create-item")
+async def create_item(item_request=Body()):
+    ITEMS.append(item_request)
+
+
