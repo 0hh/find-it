@@ -1,48 +1,45 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI
 
 app = FastAPI()
 
+class Item:
+    id: int
+    item_name: str
+    parent_location_id: int
+    children: list # containees?
+    tags: list
+    
+    def __init__(self, id, item_name, parent_location, child_location, tag):
+        self.id = id
+        self.item_name = item_name
+        self.parent_location = parent_location
+        self.children = child_location
+        self.tags = tags
+
 ITEMS = [
-    {"item_name": "Hammer", 'location': 'Spiegelschrank', 'tag': 'Werkzeug'},
-    {"item_name": "Makis Makakis", 'location': 'Auf der Minibar', 'tag': 'Deko'},
-    {"item_name": "Luftmatraze", 'location': 'Box 1', 'tag': 'Camping'},
-    {"item_name": "Eismaschine", 'location': 'Vorratskammer', 'tag': 'Kochen'},
-    {"item_name": "Boxhandschuhe", 'location': 'Tasche', 'tag': 'Sport'},
-    {"item_name": "Bandagen", 'location': 'Tasche 2', 'tag': 'Sport'},
-    {"item_name": "Schinenbeinschoner", 'location': 'Tasche 1', 'tag': 'Sport'},
-    ]
+    Item(
+        1, "Hammer",
+        2, # Parent:Werkzeugkiste
+        None ,
+        ["Werkzeug"]),
+
+    Item(
+        2, "Werkzeugkiste",
+        3, # Parent:Regal 1
+         None,
+         ["Werkzeug"]),
+
+    Item(
+        3,
+        "Regal 1", "Spiegelschrank",None ,["Werkzeug"])
+]
 
 @app.get("/items")
 async def read_all_items():
     return ITEMS
-
-
-@app.get("/items/{item_name}")
-async def read_location_for_item_name(item_name: str):
-    for item in ITEMS:
-        if item.get('item_name').casefold() == item_name.casefold():
-            return item.get('location')
-         
-@app.get("/items/{location}/")
-async def read_item_by_query(location: str, tag: str ):
-    items_to_return = []
-    for item in ITEMS:
-        print(item)
-        if item.get('location').casefold() == location.casefold() and \
-                item.get('tag').casefold() == tag.casefold():
-            items_to_return.append(item)
-    return items_to_return
-
-@app.get("/items/bytag/{tag}")
-async def read_items_by_tag_path(tag: str):
-    items_to_return = []
-    for item in ITEMS:
-        if item.get('tag').casefold() == tag.casefold():
-            items_to_return.append(item)
-    return items_to_return
-
-
-
-@app.post("/items/create_item")
-async def create_item(new_item=Body()):
-    ITEMS.append(new_item)
+"""
+get breadcrumb path of an item
+get children of a container
+get location of an Item
+change location of an Item
+"""
