@@ -65,3 +65,6 @@ start uvicorn webserver with
 (books.py contains app endpoint calling webserver uvicorn  --reload flag enables live reloading during development
 
 Uvicorn running on http://127.0.0.1:8000 by default
+
+## Data Structure
+file:///readme_img/data_structure.jpg

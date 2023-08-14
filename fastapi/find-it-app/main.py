@@ -1,37 +1,23 @@
 from fastapi import FastAPI
 
-app = FastAPI()
-
 class Item:
     id: int
     item_name: str
-    parent_location_id: int
-    children: list # containees?
+    location_id: int
+    contains_ids: list 
     tags: list
     
-    def __init__(self, id, item_name, parent_location, child_location, tag):
+    def __init__(self, id, item_name, location_id, contains_ids, tags):
         self.id = id
         self.item_name = item_name
-        self.parent_location = parent_location
-        self.children = child_location
+        self.location_id = location_id
+        self.children = contains_ids
         self.tags = tags
 
 ITEMS = [
-    Item(
-        1, "Hammer",
-        2, # Parent:Werkzeugkiste
-        None ,
-        ["Werkzeug"]),
-
-    Item(
-        2, "Werkzeugkiste",
-        3, # Parent:Regal 1
-         None,
-         ["Werkzeug"]),
-
-    Item(
-        3,
-        "Regal 1", "Spiegelschrank",None ,["Werkzeug"])
+    Item(1, "Abstellkammer",None, [] ,[]),
+    Item(2, "Oberstes Regal",1 , [], []),
+    Item(3, "Regal 1", 1 , [], []),
 ]
 
 @app.get("/items")
