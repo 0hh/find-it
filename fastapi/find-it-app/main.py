@@ -19,7 +19,7 @@ class Item:
         self.tags = tags
 
 class ItemRequest(BaseModel):
-    id: int = Field(gt=0, description="Unique identifier for the request")
+    id: int = Field(gt=0, description="Unique identifier for the item")
     item_name: str = Field(min_length=3, max_length=64, description="Name of the requested item")
     location_id: int = Field(gt=0, description="ID of the location")
     contains_ids: List[int] = Field(description="List of IDs contained within the item")

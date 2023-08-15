@@ -68,3 +68,9 @@ Uvicorn running on http://127.0.0.1:8000 by default
 
 ## Data Structure
 file:///readme_img/data_structure.jpg
+
+# rdb
+n:n in relational dbms 
+- one data type for all items can become containers
+- moving an item with all its content is easy by replacing parent id
+- infinite sub locations
