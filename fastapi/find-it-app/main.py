@@ -61,6 +61,22 @@ async def read_item_name_by_id(id: int):
         if item.id == id:
             return item.item_name
 
+
+@app.get("/item/breadcrumb/{id}")
+async def read_item_breadcrumb_by_id(id: int):
+    breadcrumb = []
+    current_item = find_item_by_id(id)
+    
+    while current_item:
+        print("while:", breadcrumb)
+        breadcrumb.append(current_item.item_name)
+        if current_item.location_id is None:
+            break
+        current_item = find_item_by_id(current_item.location_id)
+    
+    return breadcrumb[::-1]
+
+
 @app.get("/container/{item_name}/")
 async def read_item_location_id_by_name(item_name: str):
     location_ids_to_return = []
@@ -77,4 +93,13 @@ async def create_new_item(item_request: ItemRequest):
 def find_id(item: Item):
     item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1 # use last element of items dictionary to determine the new id
     return item
-    
+
+def find_item_by_id(id):
+    """Find and return the item object from the list using its id."""
+    for item in ITEMS:
+        if item.id == id:
+            return item
+    return None
+
+
+   
