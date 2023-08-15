@@ -49,11 +49,24 @@ ITEMS = [
 async def read_all_items():
     return ITEMS
 
+@app.get("/items/{item_id}")
+async def read_item_by_id(item_id: int):
+    for item in ITEMS:
+        if item.id == item_id:
+            return item
+
+@app.get("/location/{item_name}/")
+async def fetch_item_location_id_by_name(item_name: str):
+    location_ids_to_return = []
+    for item in ITEMS:
+        if item.item_name == item_name:
+            location_ids_to_return.append(item.location_id)
+    return location_ids_to_return
+
 @app.post("/create-item")
-async def create_item(item_request: ItemRequest):
+async def create_new_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
     ITEMS.append(find_item_id(new_item))
-
 
 def find_item_id(item: Item):
     item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1 # use last element of items dictionary to determine the new id
