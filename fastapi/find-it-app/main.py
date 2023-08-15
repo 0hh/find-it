@@ -19,9 +19,9 @@ class Item:
         self.tags = tags
 
 class ItemRequest(BaseModel):
-    id: int = Field(gt=0, description="Unique identifier for the item")
+    id: int
     item_name: str = Field(min_length=3, max_length=64, description="Name of the requested item")
-    location_id: int = Field(gt=0, description="ID of the location")
+    location_id: int = Field(description="ID of the location")
     contains_ids: List[int] = Field(description="List of IDs contained within the item")
     tags: List[str] = Field(description="List of tags associated with the item") 
 
@@ -42,6 +42,10 @@ async def read_all_items():
 @app.post("/create-item")
 async def create_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
-    ITEMS.append(new_item)
+    ITEMS.append(find_item_id(new_item))
 
 
+def find_item_id(item: Item):
+    item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1
+    return item
+    
