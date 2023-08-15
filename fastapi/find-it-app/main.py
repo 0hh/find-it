@@ -76,7 +76,7 @@ async def read_item_breadcrumb_by_id(id: int):
     return breadcrumb[::-1]
 
 
-@app.get("/container/{item_name}/")
+@app.get("/container/{item-name}/")
 async def read_item_location_id_by_name(item_name: str):
     location_ids_to_return = []
     for item in ITEMS:
@@ -89,11 +89,40 @@ async def create_new_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
     ITEMS.append(find_free_id(new_item))
 
-@app.put("/item/update_item")
+@app.put("/item/update-item")
 async def update_item(item: ItemRequest):
     for i in range(len(ITEMS)):
         if ITEMS[i].id == item.id:
             ITEMS[i] = item
+
+
+@app.delete("/items/{id}")
+async def delte_item_by_id(id: int):
+    for i in range(len(ITEMS)):
+        if ITEMS[i].id == id:
+            ITEMS.pop(i)
+            break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def find_free_id(item: Item):
     """Create a new id by checking the last item of the dictionary"""

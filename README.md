@@ -79,3 +79,8 @@ n:n in relational dbms
 - one data type for all items can become containers
 - moving an item with all its content is easy by replacing parent id
 - infinite sub locations
+
+# specify
+### delete
+if item is deleted what happens to children?
+if I delete toolbox 
