@@ -80,7 +80,12 @@ n:n in relational dbms
 - moving an item with all its content is easy by replacing parent id
 - infinite sub locations
 
-# specify
-### delete
-if item is deleted what happens to children?
-if I delete toolbox 
+# TODOs
+### specify delete item behaviour
+if item is deleted what happens to children? 
+option A: parent becomes grandparent e.g. Workshop - Toolbox - Hammer -- Workshop - Hammer
+option B: ask for new parent e.g. promt user for parameter of new location for children
+if I delete Toolbox is the hammer in the Workshop, or is its location undefined?
+
+### unpack endpoint
+unpack toolbox -- Workshop -Toolbox - [Hammer, Pliers] becomes Workshop - [Hammer, Pliers]
