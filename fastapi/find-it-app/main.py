@@ -15,7 +15,7 @@ class Item:
         self.id = id
         self.item_name = item_name
         self.location_id = location_id
-        self.children = contains_ids
+        self.contains_ids = contains_ids
         self.tags = tags
 
 class ItemRequest(BaseModel):
