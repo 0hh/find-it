@@ -6,8 +6,10 @@
 
 
 ## MVP
-- create item with location ✅
-- get breadcrumb trail of an item ✅
+- endpoint: create item with location ✅
+- endpoint: get item, get breadcrumb trail of an item ✅
+- endpoint: update item ✅
+- endpoint: delete item
 - authenticate at backend
 - get item from inmemory db
 - add Angular project

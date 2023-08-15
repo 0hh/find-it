@@ -89,6 +89,12 @@ async def create_new_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
     ITEMS.append(find_free_id(new_item))
 
+@app.put("/item/update_item")
+async def update_item(item: ItemRequest):
+    for i in range(len(ITEMS)):
+        if ITEMS[i].id == item.id:
+            ITEMS[i] = item
+
 def find_free_id(item: Item):
     """Create a new id by checking the last item of the dictionary"""
     item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1
