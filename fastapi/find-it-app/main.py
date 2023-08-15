@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 app = FastAPI()
 
@@ -19,10 +19,10 @@ class Item:
         self.tags = tags
 
 class ItemRequest(BaseModel):
-    id: int
+    id: Optional[int] # the type optional from typing allows id to be null in the request, backend then can assign id 
     item_name: str = Field(min_length=3, max_length=64, description="Name of the requested item")
-    location_id: int = Field(description="ID of the location")
-    contains_ids: List[int] = Field(description="List of IDs contained within the item")
+    location_id: Optional[int] = Field(description="ID of the location")
+    contains_ids: List[Optional[int]] = Field(description="List of IDs contained within the item")
     tags: List[str] = Field(description="List of tags associated with the item") 
 
 
@@ -46,6 +46,6 @@ async def create_item(item_request: ItemRequest):
 
 
 def find_item_id(item: Item):
-    item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1
+    item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1 # use last element of items dictionary to determine the new id
     return item
     
