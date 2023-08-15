@@ -68,7 +68,6 @@ async def read_item_breadcrumb_by_id(id: int):
     current_item = find_item_by_id(id)
     
     while current_item:
-        print("while:", breadcrumb)
         breadcrumb.append(current_item.item_name)
         if current_item.location_id is None:
             break
@@ -88,10 +87,11 @@ async def read_item_location_id_by_name(item_name: str):
 @app.post("/create-item")
 async def create_new_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
-    ITEMS.append(find_id(new_item))
+    ITEMS.append(find_free_id(new_item))
 
-def find_id(item: Item):
-    item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1 # use last element of items dictionary to determine the new id
+def find_free_id(item: Item):
+    """Create a new id by checking the last item of the dictionary"""
+    item.id = 1 if len(ITEMS) == 0 else ITEMS[-1].id + 1
     return item
 
 def find_item_by_id(id):
@@ -100,6 +100,3 @@ def find_item_by_id(id):
         if item.id == id:
             return item
     return None
-
-
-   
