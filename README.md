@@ -7,6 +7,7 @@
 
 ## MVP
 - create item with location ✅
+- get breadcrumb trail of an item ✅
 - authenticate at backend
 - get item from inmemory db
 - add Angular project
@@ -50,11 +51,13 @@ git pull
 
 ## Installation
 ### Conda Environment
-install miniconda 
+install miniconda
+```
     conda create -n fastapi python=3.8.16
     conda activate fastapi
-pip freeze > requirements.txt
-pip install -r requirements.txt
+    pip freeze > requirements.txt
+    pip install -r requirements.txt
+```
 
 ### FastAPI
 start uvicorn webserver with
