@@ -23,7 +23,17 @@ class ItemRequest(BaseModel):
     item_name: str = Field(min_length=3, max_length=64, description="Name of the requested item")
     location_id: Optional[int] = Field(description="ID of the location")
     contains_ids: List[Optional[int]] = Field(description="List of IDs contained within the item")
-    tags: List[str] = Field(description="List of tags associated with the item") 
+    tags: List[str] = Field(description="List of tags associated with the item")
+
+    class Config:
+        schema_extra = {
+            'example': {
+                'item_name':'Fünfteiliges Bit-Set Bosch Professional',
+                'location_id':4,
+                'contains_ids': [23,24,25,26,27],
+                'tags': ['Akkuschrauber','Bosch','Werkzeug', 'Kreuz', 'Schlitz']
+            }
+        }
 
 
 ITEMS = [
