@@ -49,14 +49,20 @@ ITEMS = [
 async def read_all_items():
     return ITEMS
 
-@app.get("/items/{item_id}")
-async def read_item_by_id(item_id: int):
+@app.get("/item/{item_id}")
+async def read_complete_item_by_id(item_id: int):
     for item in ITEMS:
         if item.id == item_id:
             return item
 
-@app.get("/location/{item_name}/")
-async def fetch_item_location_id_by_name(item_name: str):
+@app.get("/item-name/{item_id}")
+async def read_item_name_by_id(item_id: int):
+    for item in ITEMS:
+        if item.id == item_id:
+            return item.item_name
+
+@app.get("/container/{item_name}/")
+async def read_item_location_id_by_name(item_name: str):
     location_ids_to_return = []
     for item in ITEMS:
         if item.item_name == item_name:
