@@ -10,7 +10,7 @@
 - endpoint: get item, get breadcrumb trail of an item ✅
 - endpoint: update item ✅
 - endpoint: delete item ✅
-- get item from inmemory db
+- get item from inmemory db ✅
 - authenticate at backend
 - add Path validations to endpoints (77)
 - add Angular project
@@ -74,7 +74,11 @@ start uvicorn webserver with
 Uvicorn running on http://127.0.0.1:8000 by default
 
 ### SQLite
-used as fast in-memory db for development only, not safe for production.
+
+Using sqlite as fast in-memory db for development only, not safe for production.
+
+    sudo apt install sqlite3
+    sqlite3 --version
 
     sqlite3 items.db
     sqlite> 
