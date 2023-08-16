@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Path, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional
+from starlette import status
+
 
 app = FastAPI()
 
@@ -45,24 +47,30 @@ ITEMS = [
     Item(6, "Zange", 4 , [], []),
 ]
 
-@app.get("/items")
+@app.get("/items", status_code=status.HTTP_200_OK)
 async def read_all_items():
+
     return ITEMS
 
-@app.get("/item/{id}")
-async def read_complete_item_by_id(id: int):
+
+@app.get("/item/{id}", status_code=status.HTTP_200_OK)
+async def read_complete_item_by_id(id: int = Path(gt=0)):
     for item in ITEMS:
         if item.id == id:
-            return item
 
-@app.get("/item-name/{id}")
+            return item
+    raise HTTPException(status_code=404, detail='Item not found')
+
+
+@app.get("/item-name/{id}", status_code=status.HTTP_200_OK)
 async def read_item_name_by_id(id: int):
     for item in ITEMS:
         if item.id == id:
             return item.item_name
+        raise HTTPException(status_code=404, detail='Item not found')
 
 
-@app.get("/item/breadcrumb/{id}")
+@app.get("/item/breadcrumb/{id}", status_code=status.HTTP_200_OK)
 async def read_item_breadcrumb_by_id(id: int):
     breadcrumb = []
     current_item = find_item_by_id(id)
@@ -76,7 +84,7 @@ async def read_item_breadcrumb_by_id(id: int):
     return breadcrumb[::-1]
 
 
-@app.get("/container/{item-name}/")
+@app.get("/item/container/{item-name}/", status_code=status.HTTP_200_OK)
 async def read_item_location_id_by_name(item_name: str):
     location_ids_to_return = []
     for item in ITEMS:
@@ -84,24 +92,34 @@ async def read_item_location_id_by_name(item_name: str):
             location_ids_to_return.append(item.location_id)
     return location_ids_to_return
 
-@app.post("/create-item")
+
+@app.post("/item/", status_code=status.HTTP_201_CREATED)
 async def create_new_item(item_request: ItemRequest):
     new_item = Item(**item_request.dict())
     ITEMS.append(find_free_id(new_item))
 
-@app.put("/item/update-item")
+
+@app.put("/item/", status_code=status.HTTP_204_NO_CONTENT)
 async def update_item(item: ItemRequest):
+    item_changed = False
     for i in range(len(ITEMS)):
         if ITEMS[i].id == item.id:
             ITEMS[i] = item
+            item_changed = True
+    if not item_changed:
+        raise HTTPException(status_code=404, detail='Item not found')
+    
 
-
-@app.delete("/items/{id}")
+@app.delete("/items/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delte_item_by_id(id: int):
+    item_changed = False
     for i in range(len(ITEMS)):
         if ITEMS[i].id == id:
             ITEMS.pop(i)
+            item_changed = True
             break
+    if not item_changed:
+        raise HTTPException(status_code=404, detail='Item not found')
 
 
 

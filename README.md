@@ -9,9 +9,10 @@
 - endpoint: create item with location ✅
 - endpoint: get item, get breadcrumb trail of an item ✅
 - endpoint: update item ✅
-- endpoint: delete item
-- authenticate at backend
+- endpoint: delete item ✅
 - get item from inmemory db
+- authenticate at backend
+- add Path validations to endpoints (77)
 - add Angular project
 - call endpoints from frontend
 
@@ -89,3 +90,9 @@ if I delete Toolbox is the hammer in the Workshop, or is its location undefined?
 
 ### unpack endpoint
 unpack toolbox -- Workshop -Toolbox - [Hammer, Pliers] becomes Workshop - [Hammer, Pliers]
+
+### crud tag endpoints
+### get all tags endpoint
+### Path, Query validations
+### implement HTTPExceptions
+### move item
