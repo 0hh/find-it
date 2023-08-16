@@ -73,7 +73,19 @@ start uvicorn webserver with
 
 Uvicorn running on http://127.0.0.1:8000 by default
 
+### SQLite
+used as fast in-memory db for development only, not safe for production.
 
+    sqlite3 items.db
+    sqlite> 
+    INSERT INTO items (id, item_name, location_id) VALUES (1,'Abstellkammer', null);
+    INSERT INTO items (id, item_name, location_id) VALUES (2,'Oberstes Regal', 1);
+    INSERT INTO items (id, item_name, location_id) VALUES (3,'Klebeband', 2);
+    INSERT INTO items (id, item_name, location_id) VALUES (4,'Werkzeugkasten', 2);
+    INSERT INTO items (id, item_name, location_id) VALUES (5,'Hammer', 4);
+    INSERT INTO items (id, item_name, location_id) VALUES (6,'Zange', 4);
+    
+    sqlite> SELECT * FROM items
 ---
 
 # TODOs
