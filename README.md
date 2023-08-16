@@ -28,7 +28,8 @@ git pull
     git checkout -b feat/branch-name
 
 - use prefix for all branches either ´feat/branch-name´ or ´fix/branch-name´
-- create code changes on feature branch, then
+- create code changes on feature branch
+- format python code with black ```black main.py```, js with prettier?
 ```
     git checkout dev
     git pull
