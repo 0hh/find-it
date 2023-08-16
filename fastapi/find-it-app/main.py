@@ -1,14 +1,30 @@
-from fastapi import FastAPI, Path, HTTPException
+from fastapi import FastAPI, Path, HTTPException, Depends
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Annotated
 from starlette import status
 import models
-from database import engine
+from models import Items
+from database import engine, SessionLocal
+from sqlalchemy.orm import Session
 
 
 app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/")
+async def read_all_items(db: Annotated[Session, Depends(get_db)]):
+    """ Dependency injection of the opening db beforehand"""
+    return db.query(Items).all()
+
+
 
 # class Item:
 #     id: int
@@ -59,9 +75,6 @@ models.Base.metadata.create_all(bind=engine)
 # ]
 
 
-# @app.get("/items", status_code=status.HTTP_200_OK)
-# async def read_all_items():
-#     return ITEMS
 
 
 # @app.get("/item/{id}", status_code=status.HTTP_200_OK)
