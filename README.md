@@ -73,27 +73,110 @@ start uvicorn webserver with
 
 Uvicorn running on http://127.0.0.1:8000 by default
 
-## Data Structure
-file:///readme_img/data_structure.jpg
 
-# rdb
-n:n in relational dbms 
-- one data type for all items can become containers
-- moving an item with all its content is easy by replacing parent id
-- infinite sub locations
+---
 
 # TODOs
-### specify delete item behaviour
+
+- specify delete item behaviour
 if item is deleted what happens to children? 
 option A: parent becomes grandparent e.g. Workshop - Toolbox - Hammer -- Workshop - Hammer
 option B: ask for new parent e.g. promt user for parameter of new location for children
 if I delete Toolbox is the hammer in the Workshop, or is its location undefined?
 
-### unpack endpoint
+- unpack endpoint
 unpack toolbox -- Workshop -Toolbox - [Hammer, Pliers] becomes Workshop - [Hammer, Pliers]
 
-### crud tag endpoints
-### get all tags endpoint
-### Path, Query validations
-### implement HTTPExceptions
-### move item
+- crud tag endpoints
+- get all tags endpoint
+- Path, Query validations
+- implement HTTPExceptions
+- move item
+
+---
+
+# Design Choices 
+
+## Database
+### Data Structure
+file:///readme_img/data_structure.jpg
+
+#### pros for relational database
+- n:n in relational dbms
+- logical because app is about relations of things, nosql would make more sense if app is about information on very things
+- one data type for all items can become containers
+- moving an item with all its content is easy by replacing parent id
+- infinite sub locations
+#### cons for relational database
+- potentially slow, perfomance tests must be implemented and monitored
+- lots of tables..
+
+### LLM recommendation
+
+    gpt4 , role: cs-expert, question1, question2, use FastAPI for backend communication, example data:            
+    
+    "example": {
+                "item_name": "Fünfteiliges Bit-Set Bosch Professional",
+                "location_id": 4,
+                "contains_ids": [23, 24, 25, 26, 27],
+                "tags": ["Akkuschrauber", "Bosch", "Werkzeug", "Kreuz", "Schlitz"],
+            }
+
+### 1. Which database type is suited best for a small but scalable project?
+For small but scalable projects, both relational databases (RDBMS) like PostgreSQL, MySQL, SQLite and non-relational databases (NoSQL) like MongoDB, CouchDB, or Cassandra can be suitable. The best choice often depends on the nature of the data and the queries you expect:
+
+Relational Databases (RDBMS): Well-suited for structured data with relationships between different entities. They can handle complex queries and transactions. However, they can become slower as the dataset grows if not optimized properly.
+
+Non-Relational Databases (NoSQL): Good for projects where the data schema may evolve rapidly, or where you need high performance and scalability for write-heavy or distributed workloads. They are often faster with large datasets but may not support complex queries or transactions as efficiently.
+
+### 2. Which database do you recommend if you have to choose one?
+Considering the sample data, which seems structured and has relationships (e.g., items related to locations or other items they contain), I'd recommend a relational database. Among RDBMS options, PostgreSQL is a great choice due to its scalability, robustness, and rich set of features.
+**Recommendation**: PostgreSQL
+
+Now, let's design a simple schema for the inventory app:
+
+Tables:
+- users: To store user details.
+- items: To store item details.
+- locations: To store different locations.
+- tags: To store different tags.
+- item_tags: To associate items with tags.
+- item_contains: To associate items with other items they contain.
+
+Schema:
+
+    CREATE TABLE users (
+        user_id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        -- ... other user-related columns ...
+    );
+
+    CREATE TABLE locations (
+        location_id SERIAL PRIMARY KEY,
+        location_name VARCHAR(255) NOT NULL
+    );
+
+    CREATE TABLE tags (
+        tag_id SERIAL PRIMARY KEY,
+        tag_name VARCHAR(255) NOT NULL
+    );
+
+    CREATE TABLE items (
+        item_id SERIAL PRIMARY KEY,
+        item_name VARCHAR(255) NOT NULL,
+        location_id INTEGER REFERENCES locations(location_id)
+        -- ... other item-related columns ...
+    );
+
+    CREATE TABLE item_tags (
+        item_id INTEGER REFERENCES items(item_id),
+        tag_id INTEGER REFERENCES tags(tag_id),
+        PRIMARY KEY (item_id, tag_id)
+    );
+
+    CREATE TABLE item_contains (
+        parent_item_id INTEGER REFERENCES items(item_id),
+        child_item_id INTEGER REFERENCES items(item_id),
+        PRIMARY KEY (parent_item_id, child_item_id)
+    );
