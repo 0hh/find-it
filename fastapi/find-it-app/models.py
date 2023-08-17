@@ -13,6 +13,7 @@ class Users(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String)
 
+
 class Items(Base):
     __tablename__ = "items"
 

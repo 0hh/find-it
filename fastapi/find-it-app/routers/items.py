@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -15,11 +16,11 @@ def get_db():
     finally:
         db.close()
 
+
 @router.get("/")
 async def read_all_items(db: Annotated[Session, Depends(get_db)]):
-    """ Dependency injection of the opening db beforehand"""
+    """Dependency injection of the opening db beforehand"""
     return db.query(Items).all()
-
 
 
 # class Item:
@@ -69,8 +70,6 @@ async def read_all_items(db: Annotated[Session, Depends(get_db)]):
 #     Item(5, "Hammer", 4, [], []),
 #     Item(6, "Zange", 4, [], []),
 # ]
-
-
 
 
 # @router.get("/item/{id}", status_code=status.HTTP_200_OK)
@@ -153,4 +152,3 @@ async def read_all_items(db: Annotated[Session, Depends(get_db)]):
 #         if item.id == id:
 #             return item
 #     return None
-
