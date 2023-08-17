@@ -1,6 +1,17 @@
 from database import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 
+
+class Users(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True)
+    username = Column(String, unique=True)
+    full_name = Column(String)
+    hashed_password = Column(String)
+    is_active = Column(Boolean, default=True)
+    role = Column(String)
 
 class Items(Base):
     __tablename__ = "items"
@@ -8,6 +19,7 @@ class Items(Base):
     id = Column(Integer, primary_key=True, index=True)
     item_name = Column(String)
     location_id = Column(Integer)
+    owner_id = Column(Integer, ForeignKey("users.id"))
 
 
 """

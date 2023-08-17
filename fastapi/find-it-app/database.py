@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./items.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./find-it-app.db"
 
 
 engine = create_engine(
