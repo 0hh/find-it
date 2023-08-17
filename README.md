@@ -84,21 +84,26 @@ Using sqlite as fast in-memory db for development only, not safe for production.
 
     sqlite3 items.db
     sqlite> 
-    INSERT INTO items (id, item_name, location_id) VALUES (1,'Abstellkammer', null, 1);
-    INSERT INTO items (id, item_name, location_id) VALUES (2,'Oberstes Regal', 1, 1);
-    INSERT INTO items (id, item_name, location_id) VALUES (3,'Klebeband', 2, 1);
-    INSERT INTO items (id, item_name, location_id) VALUES (4,'Werkzeugkasten', 2, 1);
-    INSERT INTO items (id, item_name, location_id) VALUES (5,'Hammer', 4, 1);
-    INSERT INTO items (id, item_name, location_id) VALUES (6,'Zange', 4, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (1,'Abstellkammer', null, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (2,'Oberstes Regal', 1, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (3,'Klebeband', 2, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (4,'Werkzeugkasten', 2, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (5,'Hammer', 4, 1);
+    INSERT INTO items (id, item_name, location_id, owner_id) VALUES (6,'Zange', 4, 1);
 
     sqlite> .mode table
 
     sqlite> SELECT * FROM items;
-    +----+---------------+-------------+----------+
-    | id |   item_name   | location_id | owner_id |
-    +----+---------------+-------------+----------+
-    | 1  | Abstellkammer |             |          |
-    +----+---------------+-------------+----------+
+    +----+----------------+-------------+----------+
+    | id |   item_name    | location_id | owner_id |
+    +----+----------------+-------------+----------+
+    | 1  | Abstellkammer  |             | 1        |
+    | 2  | Oberstes Regal | 1           | 1        |
+    | 3  | Klebeband      | 2           | 1        |
+    | 4  | Werkzeugkasten | 2           | 1        |
+    | 5  | Hammer         | 4           | 1        |
+    | 6  | Zange          | 4           | 2        |
+    +----+----------------+-------------+----------+
 
     INSERT INTO users (id, email, username, full_name, hashed_password, is_active, role) VALUES (1,'dimi@mail.com', 'Ouzo61', 'Dimi Tru', 'P4$$w0rd', 1, 'admin');
     INSERT INTO users (id, email, username, full_name, hashed_password, is_active, role) VALUES (2,'theo@mail.com', 'PsychboyJack', 'Theo Geo', 'p4ss_wörd', 1, 'user');
