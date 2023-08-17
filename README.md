@@ -134,6 +134,7 @@ unpack toolbox -- Workshop -Toolbox - [Hammer, Pliers] becomes Workshop - [Hamme
 - Path, Query validations
 - implement HTTPExceptions
 - move item
+- item could have category: building, room, container, item
 
 ---
 
