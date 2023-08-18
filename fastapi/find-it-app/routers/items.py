@@ -3,8 +3,9 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Annotated
 from starlette import status
 from models import Items
-from database import SessionLocal
 from sqlalchemy.orm import Session
+from database import SessionLocal
+from .auth import get_current_user
 
 router = APIRouter()
 
@@ -17,59 +18,41 @@ def get_db():
         db.close()
 
 
+db_dependency = Annotated[Session, Depends(get_db)]
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
 @router.get("/")
 async def read_all_items(db: Annotated[Session, Depends(get_db)]):
     """Dependency injection of the opening db beforehand"""
     return db.query(Items).all()
 
 
-# class Item:
-#     id: int
-#     item_name: str
-#     location_id: int
-#     contains_ids: List[int]
-#     tags: List[str]
 
-#     def __init__(self, id, item_name, location_id, contains_ids, tags):
-#         self.id = id
-#         self.item_name = item_name
-#         self.location_id = location_id
-#         self.contains_ids = contains_ids
-#         self.tags = tags
+class ItemRequest(BaseModel):
+    id: Optional[
+        int
+    ]  # the type optional from typing allows id to be null in the request, backend then can assign id
+    item_name: str = Field(
+        min_length=3, max_length=64, description="Name of the requested item"
+    )
+    location_id: Optional[int] = Field(description="ID of the location")
+    #contains_ids: List[Optional[int]] = Field(
+    #    description="List of IDs contained within the item"
+    #)
+    contains_ids: Optional[int]
+    #tags: List[str] = Field(description="List of tags associated with the item")
+    tags: Optional[str]
+    
+    class Config:
+        schema_extra = {
+            "example": {
+                "item_name": "Fünfteiliges Bit-Set Bosch Professional",
+                "location_id": 4,
+                "contains_ids": [23, 24, 25, 26, 27],
+                "tags": ["Akkuschrauber", "Bosch", "Werkzeug", "Kreuz", "Schlitz"],
+            }
+        }
 
-
-# class ItemRequest(BaseModel):
-#     id: Optional[
-#         int
-#     ]  # the type optional from typing allows id to be null in the request, backend then can assign id
-#     item_name: str = Field(
-#         min_length=3, max_length=64, description="Name of the requested item"
-#     )
-#     location_id: Optional[int] = Field(description="ID of the location")
-#     contains_ids: List[Optional[int]] = Field(
-#         description="List of IDs contained within the item"
-#     )
-#     tags: List[str] = Field(description="List of tags associated with the item")
-
-#     class Config:
-#         schema_extra = {
-#             "example": {
-#                 "item_name": "Fünfteiliges Bit-Set Bosch Professional",
-#                 "location_id": 4,
-#                 "contains_ids": [23, 24, 25, 26, 27],
-#                 "tags": ["Akkuschrauber", "Bosch", "Werkzeug", "Kreuz", "Schlitz"],
-#             }
-#         }
-
-
-# ITEMS = [
-#     Item(1, "Abstellkammer", None, [], []),
-#     Item(2, "Oberstes Regal", 1, [3, 4], []),
-#     Item(3, "Klebeband", 2, [], []),
-#     Item(4, "Werkzeugkasten", 2, [5, 6], []),
-#     Item(5, "Hammer", 4, [], []),
-#     Item(6, "Zange", 4, [], []),
-# ]
 
 
 # @router.get("/item/{id}", status_code=status.HTTP_200_OK)
@@ -111,10 +94,13 @@ async def read_all_items(db: Annotated[Session, Depends(get_db)]):
 #     return location_ids_to_return
 
 
-# @router.post("/item/", status_code=status.HTTP_201_CREATED)
-# async def create_new_item(item_request: ItemRequest):
-#     new_item = Item(**item_request.dict())
-#     ITEMS.append(find_free_id(new_item))
+@router.post("/item", status_code=status.HTTP_201_CREATED)
+async def create_new_item(user:user_dependency,
+                          db:db_dependency,
+                          item_request: ItemRequest):
+    item_model = Items(**item_request.dict())
+    db.add(item_model)
+    db.commit()
 
 
 # @router.put("/item/", status_code=status.HTTP_204_NO_CONTENT)
