@@ -10,6 +10,8 @@
 - endpoint: get item, get breadcrumb trail of an item ✅
 - endpoint: update item ✅
 - endpoint: delete item ✅
+- endpoint: move item ✅
+- endpoint: get by tag ✅
 - get item from inmemory db ✅
 - authenticate at backend
 - add Path validations to endpoints (77)
